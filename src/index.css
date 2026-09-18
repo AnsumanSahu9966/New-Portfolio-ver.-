@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, a {
+  touch-action: manipulation;
+}
+
+img {
+  content-visibility: auto;
+}
+
+/* Refined Ultra-Subtle Glass Utility Classes */
+.glass-thick {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 
+    0 10px 30px -4px rgba(15, 23, 42, 0.04),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+}
+
+.dark .glass-thick {
+  background: rgba(18, 18, 22, 0.72);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 16px 40px -8px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Glass Pill & Tag Badges with Subtle Thin Borders */
+.glass-pill {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
+}
+
+.dark .glass-pill {
+  background: rgba(26, 26, 32, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 
+    0 2px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Delicate Specular Rim Top Highlight */
+.glass-rim {
+  position: relative;
+}
+.glass-rim::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  pointer-events: none;
+}
+.dark .glass-rim::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+}
+
+/* Ultra Low-Overhead Alternative Background Animation (Pure GPU Compositor Keyframes) */
+@keyframes ambient-wave-1 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(30px, -20px, 0) scale(1.06);
+  }
+}
+
+@keyframes ambient-wave-2 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-25px, 25px, 0) scale(0.95);
+  }
+}
+
+@keyframes ambient-wave-3 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(20px, 15px, 0) scale(1.04);
+  }
+}
+
+.animate-ambient-1 {
+  animation: ambient-wave-1 14s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-ambient-2 {
+  animation: ambient-wave-2 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-ambient-3 {
+  animation: ambient-wave-3 16s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Subtle Polygonal Shape Slow Rotations & Floats (Zero-overhead GPU compositor) */
+@keyframes polygon-rotate-drift-1 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(14px, -16px, 0) rotate(90deg);
+  }
+  50% {
+    transform: translate3d(0, -24px, 0) rotate(180deg);
+  }
+  75% {
+    transform: translate3d(-14px, -12px, 0) rotate(270deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(360deg);
+  }
+}
+
+@keyframes polygon-rotate-drift-2 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(-16px, 14px, 0) rotate(-90deg);
+  }
+  50% {
+    transform: translate3d(-6px, 22px, 0) rotate(-180deg);
+  }
+  75% {
+    transform: translate3d(14px, 10px, 0) rotate(-270deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-360deg);
+  }
+}
+
+@keyframes polygon-rotate-drift-3 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(-8deg);
+  }
+  50% {
+    transform: translate3d(16px, 18px, 0) rotate(10deg);
+  }
+}
+
+@keyframes constellation-drift {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(10px, -12px, 0);
+  }
+}
+
+.animate-polygon-1 {
+  animation: polygon-rotate-drift-1 80s linear infinite;
+  will-change: transform;
+}
+
+.animate-polygon-2 {
+  animation: polygon-rotate-drift-2 100s linear infinite;
+  will-change: transform;
+}
+
+.animate-polygon-3 {
+  animation: polygon-rotate-drift-3 36s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-constellation {
+  animation: constellation-drift 32s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Zero-Rerender Tap Ripple Animation (Ultra-subtle, gentle pulse on composite layer) */
+@keyframes glass-tap-bloom {
+  0% {
+    transform: translate3d(-50%, -50%, 0) scale(0.4);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translate3d(-50%, -50%, 0) scale(1.6);
+    opacity: 0;
+  }
+}
+
+.tap-ripple-element {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 9999px;
+  width: 34px;
+  height: 34px;
+  animation: glass-tap-bloom 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}

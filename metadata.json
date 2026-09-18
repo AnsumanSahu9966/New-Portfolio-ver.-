@@ -1,0 +1,6 @@
+{
+  "name": "Ansuman Sahu Portfolio",
+  "description": "An interactive, modern portfolio for Ansuman Sahu featuring smooth animations, glassmorphism, project showcase, and a contact form.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
