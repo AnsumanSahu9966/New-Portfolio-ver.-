@@ -159,70 +159,112 @@ export default function AbstractBackground() {
           />
         </div>
 
-        {/* Subtle Polygonal Shape Outlines (Enhances glass refraction & physical depth) */}
+        {/* Subtle Polygonal Shape Outlines (Enhances glass refraction & physical depth with mathematical symmetry) */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none">
-          {/* Geometric Polyhedron 1: Floating Icosahedral / Diamond wireframe (Top Right) */}
+          {/* Geometric Polyhedron 1: Mathematically Regular Hexagon (Top Right) */}
           <svg
-            className="absolute top-12 right-6 sm:top-20 sm:right-24 w-72 h-72 sm:w-96 sm:h-96 text-neutral-900/10 dark:text-white/10 transform-gpu origin-center animate-polygon-1"
+            className="absolute top-12 right-6 sm:top-20 sm:right-24 w-72 h-72 sm:w-96 sm:h-96 text-neutral-900/[0.08] dark:text-white/[0.08] transform-gpu origin-center animate-polygon-1"
             viewBox="0 0 300 300"
+            style={{ transformOrigin: '150px 150px' }}
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >
-            {/* Outer polygon */}
-            <polygon points="150,20 270,90 270,210 150,280 30,210 30,90" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
-            {/* Inner polygonal facets */}
-            <polygon points="150,70 230,120 230,180 150,230 70,180 70,120" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" strokeLinejoin="round" />
-            <line x1="150" y1="20" x2="150" y2="70" stroke="currentColor" strokeWidth="1" />
-            <line x1="270" y1="90" x2="230" y2="120" stroke="currentColor" strokeWidth="1" />
-            <line x1="270" y1="210" x2="230" y2="180" stroke="currentColor" strokeWidth="1" />
-            <line x1="150" y1="280" x2="150" y2="230" stroke="currentColor" strokeWidth="1" />
-            <line x1="30" y1="210" x2="70" y2="180" stroke="currentColor" strokeWidth="1" />
-            <line x1="30" y1="90" x2="70" y2="120" stroke="currentColor" strokeWidth="1" />
-            {/* Internal facet crease */}
-            <line x1="150" y1="70" x2="150" y2="230" stroke="currentColor" strokeWidth="0.75" />
-            <line x1="70" y1="120" x2="230" y2="180" stroke="currentColor" strokeWidth="0.75" />
-            <line x1="70" y1="180" x2="230" y2="120" stroke="currentColor" strokeWidth="0.75" />
+            {/* Outer Regular Hexagon (Radius 125, centered at 150, 150) */}
+            <polygon points="150,25 258.3,87.5 258.3,212.5 150,275 41.7,212.5 41.7,87.5" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
+            
+            {/* Inner Concentric Hexagon (Radius 65, centered at 150, 150) */}
+            <polygon points="150,85 206.3,117.5 206.3,182.5 150,215 93.7,182.5 93.7,117.5" stroke="currentColor" strokeWidth="0.85" strokeDasharray="4 4" strokeLinejoin="round" />
+            
+            {/* Radial Struts connecting vertices */}
+            <line x1="150" y1="25" x2="150" y2="85" stroke="currentColor" strokeWidth="0.85" />
+            <line x1="258.3" y1="87.5" x2="206.3" y2="117.5" stroke="currentColor" strokeWidth="0.85" />
+            <line x1="258.3" y1="212.5" x2="206.3" y2="182.5" stroke="currentColor" strokeWidth="0.85" />
+            <line x1="150" y1="275" x2="150" y2="215" stroke="currentColor" strokeWidth="0.85" />
+            <line x1="41.7" y1="212.5" x2="93.7" y2="182.5" stroke="currentColor" strokeWidth="0.85" />
+            <line x1="41.7" y1="87.5" x2="93.7" y2="117.5" stroke="currentColor" strokeWidth="0.85" />
+
+            {/* Central Diagonals */}
+            <line x1="150" y1="85" x2="150" y2="215" stroke="currentColor" strokeWidth="0.6" strokeDasharray="3 3" />
+            <line x1="93.7" y1="117.5" x2="206.3" y2="182.5" stroke="currentColor" strokeWidth="0.6" strokeDasharray="3 3" />
+            <line x1="93.7" y1="182.5" x2="206.3" y2="117.5" stroke="currentColor" strokeWidth="0.6" strokeDasharray="3 3" />
+
+            {/* Symmetry Node Points */}
+            <circle cx="150" cy="150" r="2.5" fill="currentColor" opacity="0.6" />
+            <circle cx="150" cy="25" r="1.5" fill="currentColor" opacity="0.5" />
+            <circle cx="258.3" cy="87.5" r="1.5" fill="currentColor" opacity="0.5" />
+            <circle cx="258.3" cy="212.5" r="1.5" fill="currentColor" opacity="0.5" />
+            <circle cx="150" cy="275" r="1.5" fill="currentColor" opacity="0.5" />
+            <circle cx="41.7" cy="212.5" r="1.5" fill="currentColor" opacity="0.5" />
+            <circle cx="41.7" cy="87.5" r="1.5" fill="currentColor" opacity="0.5" />
           </svg>
 
-          {/* Geometric Polyhedron 2: Intersecting Hexagonal Crystal Matrix (Mid-Left) */}
+          {/* Geometric Polyhedron 2: Symmetrical Square Polyhedron / Tesseract Wireframe (Mid-Left) */}
           <svg
-            className="absolute top-1/3 -left-12 sm:left-10 w-80 h-80 sm:w-[420px] sm:h-[420px] text-neutral-900/10 dark:text-white/10 transform-gpu origin-center animate-polygon-2"
+            className="absolute top-1/3 -left-12 sm:left-10 w-80 h-80 sm:w-[420px] sm:h-[420px] text-neutral-900/[0.08] dark:text-white/[0.08] transform-gpu origin-center animate-polygon-2"
             viewBox="0 0 320 320"
+            style={{ transformOrigin: '160px 160px' }}
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >
-            <polygon points="160,30 275,95 275,225 160,290 45,225 45,95" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
-            <polygon points="160,30 160,290 45,95 275,95" stroke="currentColor" strokeWidth="0.75" strokeDasharray="3 3" />
-            <polygon points="45,225 275,225 160,30" stroke="currentColor" strokeWidth="0.75" strokeDasharray="3 3" />
-            <circle cx="160" cy="160" r="3" fill="currentColor" opacity="0.6" />
-            <circle cx="160" cy="30" r="2" fill="currentColor" opacity="0.6" />
-            <circle cx="275" cy="95" r="2" fill="currentColor" opacity="0.6" />
-            <circle cx="275" cy="225" r="2" fill="currentColor" opacity="0.6" />
-            <circle cx="160" cy="290" r="2" fill="currentColor" opacity="0.6" />
-            <circle cx="45" cy="225" r="2" fill="currentColor" opacity="0.6" />
-            <circle cx="45" cy="95" r="2" fill="currentColor" opacity="0.6" />
+            {/* Outer Symmetrical Square (Side 200, centered at 160, 160) */}
+            <polygon points="60,60 260,60 260,260 60,260" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
+
+            {/* Inner Symmetrical Square (Side 100, centered at 160, 160) */}
+            <polygon points="110,110 210,110 210,210 110,210" stroke="currentColor" strokeWidth="0.85" strokeLinejoin="round" />
+
+            {/* 3D Tesseract / Cube Projection Struts connecting corners */}
+            <line x1="60" y1="60" x2="110" y2="110" stroke="currentColor" strokeWidth="0.85" />
+            <line x1="260" y1="60" x2="210" y2="110" stroke="currentColor" strokeWidth="0.85" />
+            <line x1="260" y1="260" x2="210" y2="210" stroke="currentColor" strokeWidth="0.85" />
+            <line x1="60" y1="260" x2="110" y2="210" stroke="currentColor" strokeWidth="0.85" />
+
+            {/* Concentric 45-degree Diamond Wireframe */}
+            <polygon points="160,60 260,160 160,260 60,160" stroke="currentColor" strokeWidth="0.75" strokeDasharray="4 4" strokeLinejoin="round" />
+
+            {/* Symmetry Node Points */}
+            <circle cx="160" cy="160" r="2.5" fill="currentColor" opacity="0.6" />
+            <circle cx="60" cy="60" r="1.75" fill="currentColor" opacity="0.5" />
+            <circle cx="260" cy="60" r="1.75" fill="currentColor" opacity="0.5" />
+            <circle cx="260" cy="260" r="1.75" fill="currentColor" opacity="0.5" />
+            <circle cx="60" cy="260" r="1.75" fill="currentColor" opacity="0.5" />
+            <circle cx="110" cy="110" r="1.5" fill="currentColor" opacity="0.5" />
+            <circle cx="210" cy="110" r="1.5" fill="currentColor" opacity="0.5" />
+            <circle cx="210" cy="210" r="1.5" fill="currentColor" opacity="0.5" />
+            <circle cx="110" cy="210" r="1.5" fill="currentColor" opacity="0.5" />
           </svg>
 
-          {/* Geometric Polyhedron 3: Faceted Triangular Pyramid / Geodesic Tetrahedron (Bottom-Right / Behind Dock & Footer) */}
+          {/* Geometric Polyhedron 3: Equilateral Triangle / Geodesic Tetrahedron (Bottom-Right) */}
           <svg
-            className="absolute bottom-16 -right-10 sm:right-20 w-80 h-80 sm:w-[420px] sm:h-[420px] text-neutral-900/10 dark:text-white/10 transform-gpu origin-center animate-polygon-3"
-            viewBox="0 0 350 350"
+            className="absolute bottom-16 -right-10 sm:right-20 w-80 h-80 sm:w-[420px] sm:h-[420px] text-neutral-900/[0.08] dark:text-white/[0.08] transform-gpu origin-center animate-polygon-3"
+            viewBox="0 0 320 320"
+            style={{ transformOrigin: '160px 165px' }}
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >
-            <polygon points="175,25 320,280 30,280" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
-            <polygon points="175,25 175,185 30,280" stroke="currentColor" strokeWidth="0.75" strokeLinejoin="round" />
-            <polygon points="175,25 175,185 320,280" stroke="currentColor" strokeWidth="0.75" strokeLinejoin="round" />
-            <line x1="175" y1="185" x2="175" y2="280" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
-            <circle cx="175" cy="185" r="3" fill="currentColor" opacity="0.6" />
+            {/* Outer Equilateral Triangle (Circumradius 135, Centered at 160, 165) */}
+            <polygon points="160,30 276.9,232.5 43.1,232.5" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
+
+            {/* Interior Tetrahedral Pyramidal Ridges to Circumcenter */}
+            <line x1="160" y1="30" x2="160" y2="165" stroke="currentColor" strokeWidth="0.85" strokeLinejoin="round" />
+            <line x1="276.9" y1="232.5" x2="160" y2="165" stroke="currentColor" strokeWidth="0.85" strokeLinejoin="round" />
+            <line x1="43.1" y1="232.5" x2="160" y2="165" stroke="currentColor" strokeWidth="0.85" strokeLinejoin="round" />
+
+            {/* Medial Inverted Equilateral Triangle */}
+            <polygon points="218.5,131.25 101.5,131.25 160,232.5" stroke="currentColor" strokeWidth="0.75" strokeDasharray="4 4" strokeLinejoin="round" />
+
+            {/* Symmetry Node Points */}
+            <circle cx="160" cy="165" r="2.5" fill="currentColor" opacity="0.6" />
+            <circle cx="160" cy="30" r="1.75" fill="currentColor" opacity="0.5" />
+            <circle cx="276.9" cy="232.5" r="1.75" fill="currentColor" opacity="0.5" />
+            <circle cx="43.1" cy="232.5" r="1.75" fill="currentColor" opacity="0.5" />
           </svg>
 
           {/* Discrete Polygonal Mesh Nodes & Connectors (Scattered across viewport) */}
           <svg
-            className="absolute inset-0 w-full h-full text-neutral-900/8 dark:text-white/8 pointer-events-none transform-gpu animate-constellation"
+            className="absolute inset-0 w-full h-full text-neutral-900/[0.06] dark:text-white/[0.06] pointer-events-none transform-gpu animate-constellation"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >

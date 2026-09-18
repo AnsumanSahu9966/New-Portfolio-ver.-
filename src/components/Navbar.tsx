@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Sun, Moon, Github, Linkedin, Mail, Instagram } from 'lucide-react';
+import { Menu, X, Sun, Moon, Github, Linkedin, Mail, Instagram, User } from 'lucide-react';
 import { personalInfo } from '../data';
 
 interface NavbarProps {
@@ -59,11 +59,14 @@ export default function Navbar({ darkMode, setDarkMode, activeSection, setActive
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-15">
-          {/* Logo / Name */}
+          {/* Logo / Name with User Profile Icon */}
           <div
-            className="flex-shrink-0 cursor-pointer"
+            className="flex-shrink-0 cursor-pointer flex items-center space-x-2.5 group"
             onClick={() => scrollToSection('home')}
           >
+            <div className="w-8 h-8 rounded-xl glass-subtle glass-rim flex items-center justify-center text-neutral-800 dark:text-neutral-200 border border-black/5 dark:border-white/10 group-hover:scale-105 transition-transform duration-200">
+              <User size={15} className="stroke-[2.25]" />
+            </div>
             <span className="text-xl font-black tracking-tight text-neutral-900 dark:text-white">
               {personalInfo.name}
             </span>
