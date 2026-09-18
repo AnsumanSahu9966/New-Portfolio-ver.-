@@ -184,11 +184,15 @@ export default function About() {
                   <h4 className="text-xl font-black text-neutral-900 dark:text-white">Languages</h4>
                 </div>
 
-                <div className="glass-thick glass-rim rounded-2xl p-5 grid grid-cols-2 gap-3.5">
+                <div className="glass-thick glass-rim rounded-2xl p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
                   {otherDetails.languages.map((lang, i) => (
-                    <div key={i} className="p-3 rounded-xl glass-pill">
-                      <span className="block text-sm font-black text-neutral-900 dark:text-white">{lang.name}</span>
-                      <span className="text-xxs font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">{lang.level}</span>
+                    <div key={i} className="p-3 sm:p-3.5 rounded-xl glass-pill min-w-0 flex flex-col justify-center overflow-hidden">
+                      <span className="block text-sm font-black text-neutral-900 dark:text-white truncate">
+                        {lang.name}
+                      </span>
+                      <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-normal break-words leading-relaxed mt-0.5">
+                        {lang.level}
+                      </span>
                     </div>
                   ))}
                 </div>

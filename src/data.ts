@@ -436,7 +436,7 @@ export const volunteerExp = {
 
 export const otherDetails = {
   languages: [
-    { name: 'English', level: 'Professional/Academic' },
+    { name: 'English', level: 'Professional / Academic' },
     { name: 'Hindi', level: 'Spoken & Written' },
     { name: 'Odia', level: 'Native / Mother Tongue' },
     { name: 'Telugu', level: 'Conversational / Regional' },

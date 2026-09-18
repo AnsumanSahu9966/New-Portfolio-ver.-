@@ -3,6 +3,70 @@ import { useEffect, useRef } from 'react';
 export default function AbstractBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
   const rippleContainerRef = useRef<HTMLDivElement>(null);
+  const gridLensRef = useRef<HTMLDivElement>(null);
+
+  // Ultra-lightweight GPU-only hover spotlight & subtle ripple system
+  useEffect(() => {
+    const lens = gridLensRef.current;
+    if (!lens) return;
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let targetX = mouseX;
+    let targetY = mouseY;
+    let rafId: number | null = null;
+    let isRunning = false;
+    let fadeTimeout: NodeJS.Timeout | null = null;
+    const radius = 160; // Half of 320px soft-feathered lens
+
+    const render = () => {
+      // Gentle, silky lerp for seamless, calm cursor tracking
+      mouseX += (targetX - mouseX) * 0.12;
+      mouseY += (targetY - mouseY) * 0.12;
+
+      // Pure translate3d on composite layer — 0 layout cost, 0 mask recalculations
+      lens.style.transform = `translate3d(${(mouseX - radius).toFixed(1)}px, ${(mouseY - radius).toFixed(1)}px, 0)`;
+
+      const dist = Math.hypot(targetX - mouseX, targetY - mouseY);
+      if (dist > 0.15) {
+        rafId = requestAnimationFrame(render);
+      } else {
+        isRunning = false;
+      }
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      // Ignore touch gestures to prevent lingering lenses on mobile
+      if (e.pointerType === 'touch') return;
+
+      targetX = e.clientX;
+      targetY = e.clientY;
+      lens.style.opacity = '0.65';
+
+      if (fadeTimeout) clearTimeout(fadeTimeout);
+
+      if (!isRunning) {
+        isRunning = true;
+        rafId = requestAnimationFrame(render);
+      }
+    };
+
+    const handlePointerLeave = () => {
+      fadeTimeout = setTimeout(() => {
+        if (lens) lens.style.opacity = '0';
+      }, 350);
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    document.addEventListener('mouseleave', handlePointerLeave, { passive: true });
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      document.removeEventListener('mouseleave', handlePointerLeave);
+      if (rafId) cancelAnimationFrame(rafId);
+      if (fadeTimeout) clearTimeout(fadeTimeout);
+    };
+  }, []);
 
   // Zero-re-render high performance hardware-accelerated subtle tap ripple system
   useEffect(() => {
@@ -168,10 +232,29 @@ export default function AbstractBackground() {
           </svg>
         </div>
 
-        {/* Crystalline Glass Grid Matrix (0% CPU cost, pure CSS mask) */}
+        {/* Crystalline Glass Grid Matrix (Base Layer) */}
         <div 
           className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.03)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_75%_60%_at_50%_40%,#000_70%,transparent_100%)] opacity-100" 
         />
+
+        {/* Subtle Square Graph Hover Spotlight & Ripple Layer (Ultra-optimized GPU isolated layer) */}
+        <div
+          ref={gridLensRef}
+          className="absolute top-0 left-0 w-[320px] h-[320px] rounded-full pointer-events-none transition-opacity duration-700 opacity-0 transform-gpu overflow-hidden"
+          style={{ willChange: 'transform, opacity' }}
+        >
+          {/* Whisper-soft radial ambient illumination blending effortlessly with the background */}
+          <div className="absolute inset-0 rounded-full bg-radial from-neutral-400/[0.04] via-transparent to-transparent dark:from-white/[0.035] dark:via-transparent dark:to-transparent" />
+
+          {/* Barely-perceptible micro-zoom grid (4.08rem vs 4rem base = ~2% subtle expansion) */}
+          <div 
+            className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.038)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.038)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.045)_1px,transparent_1px)] bg-[size:4.08rem_4.08rem] rounded-full [mask-image:radial-gradient(circle_at_50%_50%,black_0%,rgba(0,0,0,0.35)_35%,transparent_72%)]" 
+          />
+
+          {/* Delicate, atmospheric glass ripple ripples */}
+          <div className="absolute inset-0 rounded-full border border-neutral-600/[0.06] dark:border-white/[0.07] animate-lens-ripple-1 pointer-events-none" />
+          <div className="absolute inset-0 rounded-full border border-neutral-600/[0.06] dark:border-white/[0.07] animate-lens-ripple-2 pointer-events-none" />
+        </div>
 
         {/* Subtle Vignette for Depth */}
         <div className="absolute inset-0 bg-radial-[circle_at_50%_50%] from-transparent via-transparent to-neutral-200/20 dark:to-black/40" />

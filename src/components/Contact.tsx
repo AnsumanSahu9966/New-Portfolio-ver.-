@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Mail, Send, MapPin, Github, Linkedin, CheckCircle2, Terminal, Instagram } from 'lucide-react';
+import { Mail, Send, MapPin, Github, Linkedin, CheckCircle2, Loader2, Instagram, AlertCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { personalInfo } from '../data';
 
@@ -19,12 +19,13 @@ export default function Contact() {
   });
 
   const [sendStatus, setSendStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
-  const [sendLogs, setSendLogs] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     setFormErrors({ ...formErrors, [name]: false });
+    if (errorMessage) setErrorMessage(null);
   };
 
   const validateForm = () => {
@@ -39,23 +40,10 @@ export default function Contact() {
 
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm() || sendStatus === 'sending') return;
 
     setSendStatus('sending');
-    setSendLogs(['Initializing contact daemon...']);
-
-    const logs = [
-      'Establishing TLS handshakes with mailserver...',
-      'Validating client credentials and MIME headers...',
-      `SMTP Relay: MAIL FROM:<${formData.email}> RCPT TO:<${personalInfo.email}>`,
-      'Compiling content blocks and checking payloads...',
-    ];
-
-    logs.forEach((logText, idx) => {
-      setTimeout(() => {
-        setSendLogs((prev) => [...prev, logText]);
-      }, (idx + 1) * 500);
-    });
+    setErrorMessage(null);
 
     try {
       await emailjs.send(
@@ -71,21 +59,12 @@ export default function Contact() {
         'PCco-iEGPoie95Vqz'
       );
 
-      setTimeout(() => {
-        setSendLogs((prev) => [...prev, 'Queue dispatched! Message relayed successfully.']);
-        setTimeout(() => {
-          setSendStatus('sent');
-          setFormData({ name: '', email: '', subject: '', message: '' });
-        }, 500);
-      }, logs.length * 500);
+      setSendStatus('sent');
+      setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (error) {
       console.error('Email sending failed:', error);
-      setTimeout(() => {
-        setSendLogs((prev) => [...prev, 'Error: Connection failed. Please try again later.']);
-        setTimeout(() => {
-          setSendStatus('idle');
-        }, 1500);
-      }, logs.length * 500);
+      setErrorMessage('Unable to dispatch message directly right now. Please email directly at ansuman.slplindia@gmail.com');
+      setSendStatus('idle');
     }
   };
 
@@ -191,9 +170,10 @@ export default function Contact() {
             <div className="h-full glass-thick glass-rim rounded-3xl p-6 sm:p-8 shadow-xl relative flex flex-col justify-center">
               
               <AnimatePresence mode="wait">
-                {sendStatus === 'idle' && (
+                {sendStatus !== 'sent' ? (
                   /* Form Input View */
                   <motion.form
+                    key="contact-form"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -210,12 +190,13 @@ export default function Contact() {
                         <input
                           type="text"
                           name="name"
+                          disabled={sendStatus === 'sending'}
                           value={formData.name}
                           onChange={handleInputChange}
                           placeholder="Sam, Ram, Alex..."
                           className={`w-full px-4 py-3 rounded-xl text-xs glass-pill text-neutral-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-neutral-400/40 dark:focus:ring-white/30 transition-all ${
                             formErrors.name ? 'border-rose-500 ring-2 ring-rose-500/20' : ''
-                          }`}
+                          } ${sendStatus === 'sending' ? 'opacity-60 cursor-not-allowed' : ''}`}
                         />
                       </div>
 
@@ -227,12 +208,13 @@ export default function Contact() {
                         <input
                           type="email"
                           name="email"
+                          disabled={sendStatus === 'sending'}
                           value={formData.email}
                           onChange={handleInputChange}
                           placeholder="example@gmail.com"
                           className={`w-full px-4 py-3 rounded-xl text-xs glass-pill text-neutral-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-neutral-400/40 dark:focus:ring-white/30 transition-all ${
                             formErrors.email ? 'border-rose-500 ring-2 ring-rose-500/20' : ''
-                          }`}
+                          } ${sendStatus === 'sending' ? 'opacity-60 cursor-not-allowed' : ''}`}
                         />
                       </div>
                     </div>
@@ -245,10 +227,13 @@ export default function Contact() {
                       <input
                         type="text"
                         name="subject"
+                        disabled={sendStatus === 'sending'}
                         value={formData.subject}
                         onChange={handleInputChange}
                         placeholder="Enquiring about collaboration, project..."
-                        className="w-full px-4 py-3 rounded-xl text-xs glass-pill text-neutral-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-neutral-400/40 dark:focus:ring-white/30 transition-all"
+                        className={`w-full px-4 py-3 rounded-xl text-xs glass-pill text-neutral-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-neutral-400/40 dark:focus:ring-white/30 transition-all ${
+                          sendStatus === 'sending' ? 'opacity-60 cursor-not-allowed' : ''
+                        }`}
                       />
                     </div>
 
@@ -260,57 +245,50 @@ export default function Contact() {
                       <textarea
                         name="message"
                         rows={5}
+                        disabled={sendStatus === 'sending'}
                         value={formData.message}
                         onChange={handleInputChange}
                         placeholder="Hi Ansuman, I would like to discuss..."
                         className={`w-full px-4 py-3 rounded-xl text-xs glass-pill text-neutral-900 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-neutral-400/40 dark:focus:ring-white/30 transition-all resize-none ${
                           formErrors.message ? 'border-rose-500 ring-2 ring-rose-500/20' : ''
-                        }`}
+                        } ${sendStatus === 'sending' ? 'opacity-60 cursor-not-allowed' : ''}`}
                       />
                       {formErrors.message && (
                         <span className="text-[10px] text-rose-500 font-bold block pt-0.5">⚠️ Message must be at least 10 characters.</span>
                       )}
                     </div>
 
+                    {errorMessage && (
+                      <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs flex items-center space-x-2">
+                        <AlertCircle size={15} className="shrink-0" />
+                        <span>{errorMessage}</span>
+                      </div>
+                    )}
+
                     <button
                       type="submit"
-                      className="w-full py-3.5 rounded-xl bg-neutral-950 hover:bg-black dark:bg-white dark:hover:bg-neutral-100 hover:scale-[1.01] active:scale-[0.99] text-white dark:text-neutral-950 font-black text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all cursor-pointer flex items-center justify-center space-x-2 border border-neutral-900 dark:border-white"
+                      disabled={sendStatus === 'sending'}
+                      className={`w-full py-3.5 rounded-xl bg-neutral-950 hover:bg-black dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-neutral-950 font-black text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all flex items-center justify-center space-x-2 border border-neutral-900 dark:border-white ${
+                        sendStatus === 'sending' ? 'opacity-70 cursor-wait' : 'hover:scale-[1.01] active:scale-[0.99] cursor-pointer'
+                      }`}
                     >
-                      <Send size={14} />
-                      <span>Transmit Message</span>
+                      {sendStatus === 'sending' ? (
+                        <>
+                          <Loader2 size={15} className="animate-spin" />
+                          <span>Sending Message...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send size={14} />
+                          <span>Send Message</span>
+                        </>
+                      )}
                     </button>
                   </motion.form>
-                )}
-
-                {sendStatus === 'sending' && (
-                  /* Sending Simulator Screen */
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="space-y-4 font-mono text-xs text-neutral-300 bg-neutral-950/95 p-5 rounded-2xl border border-neutral-800 shadow-2xl"
-                  >
-                    <div className="flex items-center space-x-2 border-b border-neutral-800 pb-2.5">
-                      <Terminal size={14} className="text-neutral-400 animate-pulse" />
-                      <span className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Transmission Shell Console</span>
-                    </div>
-                    <div className="space-y-1.5 h-[180px] overflow-y-auto font-mono text-xxs scrollbar-none">
-                      {sendLogs.map((log, index) => (
-                        <div key={index} className="flex items-start">
-                          <span className="text-neutral-500 mr-2">&gt;</span>
-                          <span className="text-emerald-400 font-medium">{log}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex justify-center pt-2">
-                      <div className="w-5 h-5 rounded-full border-2 border-neutral-800 border-t-neutral-400 animate-spin" />
-                    </div>
-                  </motion.div>
-                )}
-
-                {sendStatus === 'sent' && (
+                ) : (
                   /* Success Screen */
                   <motion.div
+                    key="success-screen"
                     initial={{ scale: 0.96, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.96, opacity: 0 }}
@@ -321,10 +299,10 @@ export default function Contact() {
                     </div>
                     <div className="space-y-2">
                       <h4 className="text-base font-black text-neutral-900 dark:text-white uppercase tracking-wider">
-                        Message Transmitted!
+                        Message Sent!
                       </h4>
                       <p className="text-xs text-neutral-600 dark:text-neutral-400 max-w-sm mx-auto leading-relaxed font-medium">
-                        The simulated mail has successfully relayed directly to Ansuman at <span className="font-bold text-neutral-900 dark:text-white">ansuman.slplindia@gmail.com</span>.<br />Thank you for reaching out!
+                        Your message has been delivered directly to Ansuman at <span className="font-bold text-neutral-900 dark:text-white">ansuman.slplindia@gmail.com</span>.<br />Thank you for reaching out!
                       </p>
                     </div>
                     <button
